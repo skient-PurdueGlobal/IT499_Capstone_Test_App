@@ -1,0 +1,47 @@
+﻿@page
+@using System.Data
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.ViewOrderModel
+@{
+    ViewData["Title"] = "View Order";
+}
+
+<div class="text-center">
+    <h1 class="display-4">View Order</h1>
+    <p>
+        Order Number:  @Model.viewedOrder
+    </p>
+    <hr />
+
+    <table id="cartTable" cellpadding="5" cellspacing="0" align="center">
+        @if (Model.order.Rows.Count == 0)
+        {
+            <tr><td colspan="5">There was no order found for the id.</td></tr>
+            <tr><td colspan="5"><button onclick="window.location.href='/GetCartID'">Return</button></td></tr>
+        }
+        <tr>
+            <th>Product Name</th>
+            <th>Description</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Cost</th>
+        </tr>
+        @foreach (DataRow row in Model.order.Rows)
+        {
+            <tr>
+                <td>@row["ProdName"]</td>
+                <td>@row["Desc"]</td>
+                <td>@Convert.ToDouble(row["Price"]).ToString("C")</td>
+                <td>@Convert.ToDouble(row["Quantity"]).ToString()</td>
+                <td>@String.Format("{0:C}", (Convert.ToDouble(row["Price"])*Convert.ToDouble(row["Quantity"])))</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="4" align="right">Order Total:</td>
+            <td>@String.Format("{0:C}", (Convert.ToDouble(Model.order.Rows[0]["TotalPrice"])))</td>
+        </tr>
+    </table>
+
+    <button onclick="window.location.href='/GetOrderID'">Return</button>
+
+</div>

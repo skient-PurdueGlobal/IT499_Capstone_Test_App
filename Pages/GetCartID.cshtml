@@ -1,0 +1,21 @@
+﻿@page
+@using System.Data;
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.GetCartIDModel
+@{
+    ViewData["Title"] = "Get Shopping Cart ID";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Get Shopping Cart ID</h1>
+    <p>
+        Database Connection Status:
+        @Model.dbStatus
+    </p>
+
+    <form method="post">
+        <input type="text" asp-for="emailAddress" />
+        <span asp-validation-for="emailAddress"></span><br /><br />
+        <button>Submit</button>
+    </form>
+</div>

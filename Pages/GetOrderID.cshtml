@@ -1,0 +1,23 @@
+﻿@page
+@using System.Data
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.GetOrderIDModel
+@{
+    ViewData["Title"] = "Get Order ID";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Get Order ID</h1>
+    <p>
+        Database Connection Status:
+        @Model.dbStatus
+        <hr />
+    </p>
+
+    <form method="post">
+        <input type="text" asp-for="emailAddress" />
+        <span asp-validation-for="emailAddress"></span><br/><br/>
+        <button>Submit</button>
+    </form>
+</div>
+

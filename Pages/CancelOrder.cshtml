@@ -1,0 +1,20 @@
+﻿@page
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.CancelOrderModel
+@{
+    ViewData["Title"] = "Cancel Status";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cancel Status</h1>
+    <p>
+        Order Number:  @Model.canceledOrder
+    </p>
+    <hr />
+
+    <p>
+        @Model.cancelStatus
+    </p>
+    <button onclick="window.location.href='/GetOrderID'">Return</button>
+
+</div>

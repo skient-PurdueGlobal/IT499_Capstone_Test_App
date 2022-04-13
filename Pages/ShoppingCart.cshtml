@@ -1,0 +1,108 @@
+﻿@page
+@using System.Data;
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.ShoppingCartModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Shopping Cart</h1>
+    <p>
+        @Model.emailAddress
+        <br />
+        Last Saved:  @Model.lastSaved
+    </p>
+    <hr />
+
+    @if (Model.col.ColumnName == "InvProdID")
+    {
+        <input type="hidden" id="jsonString" value="@Model.formResult" />
+        <table id="noCartTable" cellpadding="5" cellspacing="0" align="center">
+            <tr><td colspan="5">There were no saved carts found for the id.</td></tr>
+            <tr><td colspan="5">Return or add new shopping cart below.</td></tr>
+            <tr><td colspan="5"><button onclick="window.location.href='/GetCartID'">Return</button></td></tr>
+        </table>
+        <br />
+        <table id="cartTable" cellpadding="5" cellspacing="0" align="center">
+            <tbody>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+                </tr>
+                @foreach (DataRow row in Model.cart.Rows)
+                {
+                    <tr>
+                        <td>@row["InvProdID"]</td>
+                        <td>@row["ProdName"]</td>
+                        <td>@row["Description"]</td>
+                        <td>@Convert.ToDouble(row["UnitPrice"]).ToString("C")</td>
+                        <td>
+                            <form asp-page-handler="save" method="post">
+                                <input type="hidden" asp-for="emailAddress" />
+                                <span asp-validation-for="emailAddress"></span>
+                                <input name="quantity" type="text" value=@row["Quantity"] size="5" style="text-align:center" />
+                                <input name="id" type="hidden" value=@row["InvProdID"] />
+                                <button>Update Cost</button>
+                            </form>
+                        </td>
+                        <td>@String.Format("{0:C}", (Convert.ToDouble(row["UnitPrice"]) * Convert.ToDouble(row["Quantity"])))</td>
+                    </tr>
+                    Model.totalCost += Convert.ToDouble(row["Cost"]);
+                }
+            </tbody>
+        </table>
+        <br />
+        <table cellpadding="0" cellspacing="0" align="center">
+            <tr>
+                <td></td>
+                <td>Order Total:    </td>
+                <td>@Model.totalCost.ToString("C")</td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <table id="cartTable" cellpadding="5" cellspacing="0" align="center">
+            <tbody>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Cost</th>
+                </tr>
+                @foreach (DataRow row in Model.cart.Rows)
+                {
+                    <tr>
+                        <td>@row["ProductID"]</td>
+                        <td>@row["ProdName"]</td>
+                        <td>@row["Description"]</td>
+                        <td>@Convert.ToDouble(row["UnitPrice"]).ToString("C")</td>
+                        <td>
+                            <form asp-page-handler="update" method="post">
+                                <input type="hidden" asp-for="emailAddress" />
+                                <span asp-validation-for="emailAddress"></span>
+                                <input name="quantity" type="text" value=@row["Quantity"] size="5" style="text-align:center" />
+                                <input name="id" type="hidden" value=@row["ProductID"] />
+                                <button>Update Cost</button>
+                            </form>
+                        </td>
+                        <td>@String.Format("{0:C}", (Convert.ToDouble(row["UnitPrice"]) * Convert.ToDouble(row["Quantity"])))</td>
+                    </tr>
+                    Model.totalCost += (Convert.ToDouble(row["UnitPrice"]) * Convert.ToDouble(row["Quantity"]));
+                }
+            </tbody>
+        </table>
+        <br />
+        <p>
+            Order Total: @Model.totalCost.ToString("C")
+        </p>
+    }
+</div>
+

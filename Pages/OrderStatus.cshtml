@@ -1,0 +1,63 @@
+﻿    @page
+@using System.Data
+@using IT499_Test_App.Pages
+@model IT499_Test_App.Pages.OrderStatusModel
+@{
+    ViewData["Title"] = "Order Status";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Order Status</h1>
+    <p>
+    </p>
+    <hr />
+
+    <table cellpadding="5" cellspacing="0" align="center">
+        <tr>
+            <th>Order ID</th>
+            <th>Total Price</th>
+            <th>Has Shipped?</th>
+            <th>Email</th>
+            <th colspan="2">Actions</th>
+        </tr>
+        @if (Model.orders.Rows.Count == 0)
+        {
+            <tr><td colspan="5">There were no orders found for the id.</td></tr>
+            <tr><td colspan="5"><button onclick="window.location.href='/GetOrderID'">Return</button></td></tr>
+        }
+        else
+        {
+            @foreach (DataRow row in Model.orders.Rows)
+            {
+                <tr>
+                    <td>@row["OrderID"]</td>
+                    <td>@String.Format("{0:C}", Convert.ToDouble(row["TotalPrice"]))</td>
+                    <td>@row["HasShipped"]</td>
+                    <td>@row["Email"]</td>
+                    <td><button onclick="ViewOrder(@row["orderID"])">View Order</button></td>
+                    @if ((string)row["HasShipped"] == "False")
+                    {
+                        <td>
+                            <button onclick="CancelOrder(@row["orderID"])">Cancel Order</button>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </table>
+</div>
+<script>
+    function CancelOrder(id) {
+        const url = "/CancelOrder?orderID=" + id;
+
+        window.location.href = url;
+    }
+    function ViewOrder(id) {
+        const url = "/ViewOrder?orderID=" + id;
+
+        window.location.href = url;
+    }
+</script>
+
+
